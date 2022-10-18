@@ -1,0 +1,23 @@
+{
+  "name": "smart_home_ic_project",
+  "version": "1.0.0",
+  "description": "Smart Home IC Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Timothy Ndichu",
+  "license": "ISC",
+  "dependencies": {
+    "bufferutil": "^4.0.3",
+    "express": "^4.17.1",
+    "express-ws": "^5.0.2",
+    "socket.io": "^2.3.0",
+    "utf-8-validate": "^5.0.5",
+    "ws": "^7.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
