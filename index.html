@@ -5,14 +5,14 @@
       let ws = new WebSocket(HOST);
       let el;
       ws.onmessage = (event) => {
-        el = document.getElementById('status-lights');
+        el = document.getElementById('status');
         el.innerHTML = '\n' + el.innerHTML + event.data;
       };
     </script>
   </head>
   <body>
-    <p id="status-lights">
-      Status of Lights:
+    <p id="status">
+      WebSocket data:
     </p>
   </body>
 </html>

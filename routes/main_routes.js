@@ -12,15 +12,70 @@ const express = require('express');
 const router = express.Router();
 
 const controller = require('../controllers/main_controller');
-
-router.get('/getLightStatus', controller.getLightStatus);
-
+const userController = require('../controllers/user_controller');
 
 
+const aws = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+aws.config.update({
+  accessKeyId: accessKeyId,
+  secretAccessKey: secretAccessKey,
+  region: "us-east-2",
+  signatureVersion: "v4",
+});
+
+// const { S3Client } = require('@aws-sdk/client-s3');
+// const s3 = new S3Client();
+var s3 = new aws.S3({});
+
+// UPLOAD USERS CSV
+var uploadCSV = multer({
+  limits: {
+    fileSize: 10485760, // 10MB
+  },
+  storage: multerS3({
+    s3: s3,
+    bucket: "ndichu-storage",
+    
+    key: function (req, file, cb) {
+
+      cb(
+        null,
+        "csv/" +
+          new Date().toISOString().replace(/:/g, "-") +
+          "-" +
+          file.originalname
+      );
+    },
+  }),
+});
 
 
 
 
+
+
+
+
+
+
+router.get('/getTempReadings', controller.getTempReadings);
+router.get('/getAccReadings', controller.getAccReadings);
+router.get('/getGyroReadings', controller.getGyroReadings);
+
+router.post('/postReadings', controller.postReadings);
+
+
+// router.post('/uploadCSV',uploadCSV.single("csvFile"), controller.testCSV);
+router.post('/uploadCSV',uploadCSV.single("csvFile"), controller.uploadCSV);
+
+router.post('/login', userController.login);
+router.post('/register', userController.register);
+router.get('/getAllUsers', userController.getAllUsers);
 
 /**
  * Module exports are the instruction that tells Node. js which bits of code (functions, objects, strings, etc.) 
